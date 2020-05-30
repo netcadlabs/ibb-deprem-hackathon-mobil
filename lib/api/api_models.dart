@@ -1,6 +1,30 @@
 import 'dart:convert';
 import 'dart:core';
 
+class RegisteredUser {
+  String identity;
+  int status;
+  int lastUpdateTime;
+
+  RegisteredUser({this.identity, this.status, this.lastUpdateTime});
+
+  RegisteredUser.fromJson(Map json)
+      : identity = json["identity"],
+        lastUpdateTime = 0,
+        status = 0;
+}
+
+class DeviceCredentials {
+  String deviceId;
+  String deviceCredential;
+
+  DeviceCredentials({this.deviceId, this.deviceCredential});
+
+  DeviceCredentials.fromJson(Map json)
+      : deviceId = json["deviceId"]["id"],
+        deviceCredential = json["credentialsId"];
+}
+
 class AuthUser {
   String token;
   String refreshToken;

@@ -1,5 +1,5 @@
 import 'package:depremhackathon/pages/login.dart';
-import 'package:depremhackathon/pages/main.dart';
+import 'package:depremhackathon/pages/main_page.dart';
 import 'package:depremhackathon/services/authenction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,11 +19,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Deprem Hackathon',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Deprem Hackathon Home Page'),
     );
   }
 }
@@ -41,19 +41,18 @@ enum AuthStatus { notDetermined, notSignedIn, signedIn }
 
 class _MyHomePageState extends State<MyHomePage> {
   AuthStatus authStatus = AuthStatus.notDetermined;
-  AuthUser authUser;
+  RegisteredUser authUser;
   SharedPreferences sharedPreferences;
   final AuthenticationService _auth = locator<AuthenticationService>();
-
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _auth.currentUser().then((AuthUser authUser) {
+    _auth.currentRegisteredUser().then((RegisteredUser authUser) {
       setState(() {
-        if (authUser == null || authUser.token == null) {
+        if (authUser == null || authUser.identity == null) {
           this.authStatus = AuthStatus.notSignedIn;
-        } else if (authUser != null && authUser.token != null) {
+        } else if (authUser != null && authUser.identity != null) {
           this.authStatus = AuthStatus.signedIn;
           this.authUser = authUser;
         } else {
@@ -61,11 +60,16 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       });
       if (this.authUser != null) {
-        NDUApiProvider.init(this.authUser.token);
+        NDUApiProvider.init(this.authUser.identity);
 //        _pushNotificationService.initialise(authUser: this.authUser);
 //        _pushNotificationService.subscribeTopicsForUser(this.authUser);
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
