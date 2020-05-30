@@ -73,7 +73,8 @@ class AuthenticationService {
   Future<List<String>> getRelatives() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> list = prefs.getStringList(_RELATIVES);
-    return list;
+    if (list == null) list = List<String>();
+    return Future.value(list);
   }
 
   Future<void> signOut() async {
@@ -84,6 +85,7 @@ class AuthenticationService {
 
     prefs.remove(_STATUS);
     prefs.remove(_LAST_UPDATE);
+    prefs.remove(_RELATIVES);
 
     _registeredDeviceCredentials = null;
     _registeredUser = null;

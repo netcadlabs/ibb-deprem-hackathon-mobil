@@ -115,11 +115,12 @@ class _MainPageState extends State<MainPage> {
                   child: ClipOval(
                     child: Container(
                       color: safeColor,
-                      height: 120.0, // height of the button
-                      width: 120.0, // width of the button
+                      height: getCircleSize(1, 120, 90),
+                      width: getCircleSize(1, 120, 90),
                       child: Center(
                           child: Text(
                         'Güvendeyim',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       )),
@@ -140,10 +141,11 @@ class _MainPageState extends State<MainPage> {
                   child: ClipOval(
                     child: Container(
                       color: dangerColor,
-                      height: 120.0, // height of the button
-                      width: 120.0, // width of the button
+                      height: getCircleSize(-1, 120, 90),
+                      width: getCircleSize(-1, 120, 90),
                       child: Center(
                           child: Text('Güvende Değilim',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold))),
@@ -181,6 +183,13 @@ class _MainPageState extends State<MainPage> {
     return _registeredUser.status == 1
         ? safeBackgroundColor
         : dangerBackgroundColor;
+  }
+
+  double getCircleSize(
+      int checkStatus, double activeSize, double deactiveSize) {
+    if (_registeredUser == null) return deactiveSize;
+
+    return _registeredUser.status == checkStatus ? activeSize : deactiveSize;
   }
 
   Widget getdrawer() {

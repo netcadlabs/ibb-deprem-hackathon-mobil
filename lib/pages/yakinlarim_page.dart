@@ -63,7 +63,7 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
           );
         }
         if (snapshot.data.length == 0) {
-          return Center(child: Text("Bulunamadı"));
+          return Center(child: Text("Yakınlarım Listesi Boş"));
         }
         return ListView.builder(
           itemCount: snapshot.data.length,
@@ -74,7 +74,7 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
               child: GestureDetector(
                 onTap: () {
                   print("${identifier} tıklandı...");
-                  _relativeDetailShow(context);
+                  _relativeDetailShow(context, identifier);
                 },
                 child: Container(
                     padding: EdgeInsets.all(5),
@@ -108,8 +108,6 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
       future: _auth.getRelatives(),
     );
   }
-
-  TextEditingController _textFieldController = TextEditingController();
 
   _addNewRelativeDialog(BuildContext context) async {
     return showDialog(
@@ -166,56 +164,21 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
         });
   }
 
-  _relativeDetailShow(BuildContext context) async {
+  _relativeDetailShow(BuildContext context, String identifier) async {
     return showDialog(
         context: context,
         builder: (context) {
-          TextEditingController _textFieldController = TextEditingController();
-          final _textKey = GlobalKey<FormState>();
+
           return AlertDialog(
-            title: Text('Yeni Yakın Ekle'),
-            content: TextField(
-              key: _textKey,
-              keyboardType: TextInputType.number,
-              controller: _textFieldController,
-              decoration: InputDecoration(hintText: "Kimlik Numarası Giriniz"),
-              maxLines: 1,
-              maxLength: 11,
-            ),
+            title: Text(identifier),
+            content: Container(),
             actions: <Widget>[
               new FlatButton(
-                child: new Text('İptal'),
+                child: new Text('Tamam'),
                 onPressed: () {
-                  _textFieldController.clear();
                   Navigator.of(context).pop();
                 },
               ),
-              new FlatButton(
-                child: new Text('Ekle'),
-                onPressed: () async {
-                  String yorum = _textFieldController.text;
-                  if (yorum != null && yorum.length >= 5) {
-                    print("$yorum");
-
-                    List<String> list = await _auth.addRelative(yorum);
-                    setState(() {
-                      _relativeList = list;
-                    });
-//                    String mesaj = "Yorum eklendi";
-//                    Color color = Colors.grey;
-//                    Fluttertoast.showToast(
-//                        msg: mesaj,
-//                        toastLength: Toast.LENGTH_LONG,
-//                        gravity: ToastGravity.CENTER,
-//                        timeInSecForIosWeb: 1,
-//                        backgroundColor: color,
-//                        textColor: Colors.white,
-//                        fontSize: 16.0);
-                    _textFieldController.clear();
-                    Navigator.of(context).pop();
-                  }
-                },
-              )
             ],
           );
         });

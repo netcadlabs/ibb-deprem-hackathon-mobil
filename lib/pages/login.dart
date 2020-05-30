@@ -188,6 +188,7 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           TextFormField(
             controller: identityNumberController,
+            maxLength: 11,
             style: TextStyle(color: Colors.black),
             decoration: InputDecoration(
               icon: Icon(Icons.confirmation_number, color: Colors.red),
