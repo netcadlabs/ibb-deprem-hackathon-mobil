@@ -25,6 +25,17 @@ class DeviceCredentials {
         deviceCredential = json["credentialsId"];
 }
 
+class DeviceDetails {
+  int status;
+  int lastSeen;
+
+  DeviceDetails({this.status, this.lastSeen});
+
+  DeviceDetails.fromJson(Map json)
+      : status = json["status"] == null ? 0 : int.parse(json["status"]),
+        lastSeen = json["lastSeen"] == null ? 0 : int.parse(json["lastSeen"]);
+}
+
 class AuthUser {
   String token;
   String refreshToken;

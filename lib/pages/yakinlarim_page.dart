@@ -1,3 +1,5 @@
+import 'package:depremhackathon/api/api_models.dart';
+import 'package:depremhackathon/api/device_api.dart';
 import 'package:depremhackathon/services/authenction_service.dart';
 import 'package:depremhackathon/styles/common_styles.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../locator.dart';
+import '../utils.dart';
 
 class YakinlarimPage extends StatefulWidget {
   @override
@@ -12,6 +15,7 @@ class YakinlarimPage extends StatefulWidget {
 }
 
 class _YakinlarimSayfasiState extends State<YakinlarimPage> {
+  final DeviceApi deviceApi = DeviceApi();
   final AuthenticationService _auth = locator<AuthenticationService>();
   List<String> _relativeList;
 
@@ -165,22 +169,70 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
   }
 
   _relativeDetailShow(BuildContext context, String identifier) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-
-          return AlertDialog(
-            title: Text(identifier),
-            content: Container(),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text('Tamam'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: new Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              new CircularProgressIndicator(),
+              new Text("Yükleniyor"),
             ],
-          );
-        });
+          ),
+        );
+      },
+    );
+
+    deviceApi
+        .getRegisteredDeviceDetails(identifier)
+        .then((DeviceDetails deviceDetails) {
+      Navigator.pop(context); //pop dialog
+
+      String durum = "Bilinmiyor";
+      String dateStr = "Bilinmiyor";
+
+      if (deviceDetails != null) {
+        dateStr = Utils.formatTimeStamp(deviceDetails.lastSeen);
+        if (deviceDetails.status == 1) {
+          durum = "Güvende";
+        } else if (deviceDetails.status == -1) {
+          durum = "Güvende Değil";
+        }
+      }
+
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(identifier),
+              content: Container(
+                height: 100,
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[Text("Durum : "), Text(durum)],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text("Son Güncelleme : "),
+                        Text(dateStr)
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text('Tamam'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    });
   }
 }

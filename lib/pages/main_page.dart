@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../utils.dart';
 import 'duyurular_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -370,11 +371,7 @@ class _MainPageState extends State<MainPage> {
         _registeredUser.lastUpdateTime == null ||
         _registeredUser.lastUpdateTime == 0) return Container();
 
-    DateTime lastUpdated =
-        DateTime.fromMillisecondsSinceEpoch(_registeredUser.lastUpdateTime);
-
-    String dateStr =
-        "${lastUpdated.year.toString()}-${lastUpdated.month.toString().padLeft(2, '0')}-${lastUpdated.day.toString().padLeft(2, '0')} ${lastUpdated.hour.toString().padLeft(2, '0')}:${lastUpdated.minute.toString().padLeft(2, '0')}";
+    String dateStr = Utils.formatTimeStamp(_registeredUser.lastUpdateTime);
     return Container(
       child: Row(
         children: <Widget>[

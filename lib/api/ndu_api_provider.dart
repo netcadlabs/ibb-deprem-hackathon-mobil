@@ -29,8 +29,11 @@ class NDUApiProvider {
 
   Future<http.Response> get(String path) async {
     try {
+      String url = "$_BASE_URL/$path";
+      print("Sending post request to $url");
+
       final responseBody =
-          await http.get('$_BASE_URL/$path', headers: _headers);
+          await http.get('$url', headers: _headers);
       return responseBody;
     } on SocketException {
       throw Exception('No Internet connection');

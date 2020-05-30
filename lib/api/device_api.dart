@@ -15,7 +15,7 @@ class DeviceApi extends BaseApi {
     var data = jsonDecode(response.body);
 
     if (response.statusCode != 200) {
-      print('API Login Error : $data');
+      print('API registerPhone Error : $data');
       return Future.error(data);
     }
 
@@ -35,10 +35,28 @@ class DeviceApi extends BaseApi {
       var data = jsonDecode(response.body);
 
     if (response.statusCode != 200) {
-      print('API Login Error : $data');
+      print('API sendAttribute Error : $data');
       return Future.error(false);
     }
 
     return Future.value(true);
+  }
+
+  Future<DeviceDetails> getRegisteredDeviceDetails(identifier) async {
+    String path = "api/mobile/details?name=${identifier}";
+
+    var response = await provider.get(path);
+
+    var data;
+    if (response.body != null && response.body != "")
+      var data = jsonDecode(response.body);
+
+    if (response.statusCode != 200) {
+      print('API getRegisteredDeviceDetails Error : $data');
+      return Future.value(null);
+    }
+
+    DeviceDetails deviceDetails = DeviceDetails.fromJson(data);
+    return Future.value(deviceDetails);
   }
 }
