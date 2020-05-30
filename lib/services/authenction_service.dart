@@ -12,6 +12,7 @@ class AuthenticationService {
   static const String _LAST_UPDATE = "_lastUpdate";
   static const String _DEVICE_ID = "device_id";
   static const String _DEVICE_CREDENTIAL = "device_credential";
+  static const String _RELATIVES = "relatives";
 
   Future<RegisteredUser> currentRegisteredUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -58,6 +59,23 @@ class AuthenticationService {
     prefs.setString(_DEVICE_CREDENTIAL, deviceCredentials.deviceCredential);
   }
 
+  Future<List<String>> addRelative(String identifier) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String> list = prefs.getStringList(_RELATIVES);
+    if (list == null) list = List<String>();
+
+    list.add(identifier);
+    prefs.setStringList(_RELATIVES, list);
+    return list;
+  }
+
+  Future<List<String>> getRelatives() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> list = prefs.getStringList(_RELATIVES);
+    return list;
+  }
+
   Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove(_IDENTITY);
@@ -70,5 +88,21 @@ class AuthenticationService {
     _registeredDeviceCredentials = null;
     _registeredUser = null;
     return;
+  }
+
+  Future<bool> removeRelative(String identifier) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String> list = prefs.getStringList(_RELATIVES);
+    if (list == null) return false;
+
+    List<String> listTemp = List<String>();
+    list.forEach((element) {
+      if (element != identifier) listTemp.add(element);
+    });
+
+    prefs.setStringList(_RELATIVES, listTemp);
+
+    return true;
   }
 }

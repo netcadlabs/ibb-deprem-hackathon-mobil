@@ -2,7 +2,9 @@ import 'package:depremhackathon/api/api_models.dart';
 import 'package:depremhackathon/api/device_api.dart';
 import 'package:depremhackathon/locator.dart';
 import 'package:depremhackathon/pages/login.dart';
+import 'package:depremhackathon/pages/yakinlarim_page.dart';
 import 'package:depremhackathon/services/authenction_service.dart';
+import 'package:depremhackathon/styles/common_styles.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,7 @@ class _MainPageState extends State<MainPage> {
   Color dangerColor = Color.fromRGBO(153, 0, 0, 1);
   Color safeBackgroundColor = Color.fromRGBO(0, 102, 0, 0.3);
   Color dangerBackgroundColor = Color.fromRGBO(153, 0, 0, 0.3);
+  String userIdentity = "-";
 
   @override
   Future<void> initState() {
@@ -50,15 +53,32 @@ class _MainPageState extends State<MainPage> {
     _auth.currentRegisteredUser().then((value) {
       setState(() {
         _registeredUser = value;
+        userIdentity = _registeredUser.identity;
       });
     });
   }
+
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("İBB Deprem Hackathon"),
+//        backgroundColor: Colors.red,
+        title: Text(
+          "İBB Deprem Hackathon",
+          style: CommonWidgetAndStyles.appBarTitleStyle,
+        ),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            icon: Icon(Icons.dehaze),
+            onPressed: () {
+              if (_scaffoldKey.currentState.isDrawerOpen == false) {
+                _scaffoldKey.currentState.openDrawer();
+              } else {
+                _scaffoldKey.currentState.openEndDrawer();
+              }
+            }),
         actions: <Widget>[
           PopupMenuButton<Choice>(
             enabled: true,
@@ -74,72 +94,79 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      body: Center(
-        child: Container(
-          color: getCurrentBackgroundColor(),
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                  child: GestureDetector(
-                onTap: () async {
-                  sendStatus(true);
-                },
-                child: ClipOval(
-                  child: Container(
-                    color: safeColor,
-                    height: 120.0, // height of the button
-                    width: 120.0, // width of the button
-                    child: Center(
-                        child: Text(
-                      'Güvendeyim',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    )),
+//      drawer:
+      body: Scaffold(
+        key: _scaffoldKey,
+        drawer: getdrawer(),
+        body: Center(
+          child: Container(
+            color: getCurrentBackgroundColor(),
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Center(
+                    child: GestureDetector(
+                  onTap: () async {
+                    sendStatus(true);
+                  },
+                  child: ClipOval(
+                    child: Container(
+                      color: safeColor,
+                      height: 120.0, // height of the button
+                      width: 120.0, // width of the button
+                      child: Center(
+                          child: Text(
+                        'Güvendeyim',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      )),
+                    ),
                   ),
+                )),
+                Container(
+                  child: _getSafeOptions(),
                 ),
-              )),
-              SizedBox(
-                height: 50,
-              ),
-              Center(
-                  child: GestureDetector(
-                onTap: () async {
-                  sendStatus(false);
-                },
-                child: ClipOval(
-                  child: Container(
-                    color: dangerColor,
-                    height: 120.0, // height of the button
-                    width: 120.0, // width of the button
-                    child: Center(
-                        child: Text('Güvende Değilim',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold))),
+                SizedBox(
+                  height: 50,
+                ),
+                Center(
+                    child: GestureDetector(
+                  onTap: () async {
+                    sendStatus(false);
+                  },
+                  child: ClipOval(
+                    child: Container(
+                      color: dangerColor,
+                      height: 120.0, // height of the button
+                      width: 120.0, // width of the button
+                      child: Center(
+                          child: Text('Güvende Değilim',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold))),
+                    ),
                   ),
+                )),
+                Container(
+                  child: _getDangerOptions(),
                 ),
-              )),
-              Container(
-                child: _getOptions(),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 5),
-                child: _lastStatus(),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 5),
-                child: _locationStatus(),
-              ),
-              Container(
-//                margin: EdgeInsets.all(20),
-                child: _currentUserDetails(),
-              )
-            ],
+                Expanded(
+                  child: Container(),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 5),
+                  child: _lastStatus(),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 5),
+                  child: _locationStatus(),
+                ),
+//                Container(
+//                  child: _currentUserDetails(),
+//                )
+              ],
+            ),
           ),
         ),
       ),
@@ -154,11 +181,161 @@ class _MainPageState extends State<MainPage> {
         : dangerBackgroundColor;
   }
 
-  Widget _getOptions() {
-    if (_registeredUser == null || _registeredUser.lastUpdateTime == 0)
+  Widget getdrawer() {
+    return Container(
+      width: 260,
+      child: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Container(
+              height: 150,
+              child: DrawerHeader(
+                padding: EdgeInsets.only(top: 20, left: 20),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ClipOval(
+                      child: Container(
+                        padding: EdgeInsets.all(2),
+                        color: Colors.white,
+                        height: 45.0,
+                        width: 45.0,
+                        child: Center(child: Icon(Icons.person)),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          userIdentity,
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.supervisor_account,
+                color: Colors.grey,
+              ),
+              title: Text('Yakınlarım'),
+              onTap: () {
+                print("Yakınlarım tıklandı");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => YakinlarimPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.map,
+                color: Colors.grey,
+              ),
+              title: Text('Toplanma Alanları'),
+              onTap: () {
+                print("Toplanma tıklandı");
+              },
+            ),
+            Divider(
+              color: Colors.grey,
+              thickness: 1,
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.help,
+                color: Colors.grey,
+              ),
+              title: Text('Yardım'),
+              onTap: () {
+                print("Yardım tıklandı");
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _getDangerOptions() {
+    if (_registeredUser == null) return Container();
+
+    return _registeredUser.status == -1
+        ? Container(
+            padding: EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () async {
+                    sendDangerStatus("YARALI", true);
+                  },
+                  child: ClipOval(
+                    child: getOptionCircle("Yaralıyım",
+                        color: dangerColor.withOpacity(0.7)),
+                  ),
+                ),
+                SizedBox(
+                  width: 6,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    sendDangerStatus("GÖÇÜK", true);
+                  },
+                  child: ClipOval(
+                    child: getOptionCircle("Göçük Altındayım",
+                        color: dangerColor.withOpacity(0.7)),
+                  ),
+                ),
+              ],
+            ),
+          )
+        : Container();
+  }
+
+  Widget _getSafeOptions() {
+    if (_registeredUser == null || _registeredUser.status != 1)
       return Container();
 
-    return _registeredUser.status == -1 ? _dangerOptions() : Container();
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          GestureDetector(
+            onTap: () async {
+              sendDangerStatus("TOPLANMA_ALANI", true);
+            },
+            child: ClipOval(
+              child: getOptionCircle("Toplanma Alanındayım",
+                  color: safeColor.withOpacity(0.7)),
+            ),
+          ),
+          SizedBox(
+            width: 6,
+          ),
+          GestureDetector(
+            onTap: () async {
+              sendDangerStatus("GÖÇÜK", true);
+            },
+            child: getOptionCircle("Göçük Altındayım",
+                color: dangerColor.withOpacity(0.7)),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _lastStatus() {
@@ -228,55 +405,21 @@ class _MainPageState extends State<MainPage> {
       );
   }
 
-  Widget _dangerOptions() {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          GestureDetector(
-            onTap: () async {
-              sendDangerStatus("YARALI", true);
-            },
-            child: ClipOval(
-              child: getOptionCircle("Yaralıyım",
-                  color: dangerColor.withOpacity(0.7)),
-            ),
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          GestureDetector(
-            onTap: () async {
-              sendDangerStatus("GÖÇÜK", true);
-            },
-            child: ClipOval(
-              child: getOptionCircle("Göçük Altındayım",
-                  color: dangerColor.withOpacity(0.7)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget getOptionCircle(String text, {Color color}) {
     if (color == null) color = Colors.grey;
     return ClipOval(
       child: Container(
         padding: EdgeInsets.all(2),
         color: color,
-        height: 64.0,
-        // height of the button
-        width: 64.0,
-        // width of the button
+        height: 66.0,
+        width: 66.0,
         child: Center(
             child: Text(text,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12))),
+                    fontSize: 11))),
       ),
     );
   }
@@ -284,8 +427,11 @@ class _MainPageState extends State<MainPage> {
   void sendStatus(bool status) async {
     int deviceTime = DateTime.now().millisecondsSinceEpoch;
 
-    bool result = await deviceApi.sendAttribute(_deviceCredentials.deviceId,
-        {"status": status, "deviceTime": deviceTime});
+    bool result = await deviceApi.sendAttribute(_deviceCredentials.deviceId, {
+      "status": status,
+      "error": status == false, //Durum false ise error true gönder
+      "deviceTime": deviceTime
+    });
 
     int statusInt = status ? 1 : -1;
     _auth.setLocalUserStatus(statusInt, deviceTime);
@@ -365,7 +511,6 @@ class _MainPageState extends State<MainPage> {
         if (res)
           setState(() {
             _locationSent = true;
-//        _currentPosition = position;
           });
       });
     }).catchError((e) {
