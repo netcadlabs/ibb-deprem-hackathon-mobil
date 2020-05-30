@@ -7,6 +7,7 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -24,11 +25,12 @@ class _MainPageState extends State<MainPage> {
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   DeviceCredentials _deviceCredentials;
   RegisteredUser _registeredUser;
+  bool _locationSent = false;
 
   Color safeColor = Color.fromRGBO(0, 102, 0, 1);
   Color dangerColor = Color.fromRGBO(153, 0, 0, 1);
-  Color safeBackgroundColor = Color.fromRGBO(0, 102, 0, 0.5);
-  Color dangerBackgroundColor = Color.fromRGBO(153, 0, 0, 0.5);
+  Color safeBackgroundColor = Color.fromRGBO(0, 102, 0, 0.3);
+  Color dangerBackgroundColor = Color.fromRGBO(153, 0, 0, 0.3);
 
   @override
   Future<void> initState() {
@@ -41,6 +43,8 @@ class _MainPageState extends State<MainPage> {
       setState(() {
         _deviceCredentials = value;
       });
+
+      _getCurrentLocation();
     });
 
     _auth.currentRegisteredUser().then((value) {
@@ -124,16 +128,16 @@ class _MainPageState extends State<MainPage> {
                 child: Container(),
               ),
               Container(
-                margin: EdgeInsets.all(5),
+                margin: EdgeInsets.only(bottom: 5),
                 child: _lastStatus(),
               ),
               Container(
-                margin: EdgeInsets.all(20),
-                child: _registeredUser != null
-                    ? Text("${_registeredUser.identity} olarak giriş yaptınız.")
-                    : SizedBox(
-                        height: 1,
-                      ),
+                margin: EdgeInsets.only(bottom: 5),
+                child: _locationStatus(),
+              ),
+              Container(
+//                margin: EdgeInsets.all(20),
+                child: _currentUserDetails(),
               )
             ],
           ),
@@ -148,6 +152,133 @@ class _MainPageState extends State<MainPage> {
     return _registeredUser.status == 1
         ? safeBackgroundColor
         : dangerBackgroundColor;
+  }
+
+  Widget _getOptions() {
+    if (_registeredUser == null || _registeredUser.lastUpdateTime == 0)
+      return Container();
+
+    return _registeredUser.status == -1 ? _dangerOptions() : Container();
+  }
+
+  Widget _lastStatus() {
+    if (_registeredUser == null ||
+        _registeredUser.lastUpdateTime == null ||
+        _registeredUser.lastUpdateTime == 0) return Container();
+
+    DateTime lastUpdated =
+        DateTime.fromMillisecondsSinceEpoch(_registeredUser.lastUpdateTime);
+
+    String dateStr =
+        "${lastUpdated.year.toString()}-${lastUpdated.month.toString().padLeft(2, '0')}-${lastUpdated.day.toString().padLeft(2, '0')} ${lastUpdated.hour.toString().padLeft(2, '0')}:${lastUpdated.minute.toString().padLeft(2, '0')}";
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Icon(
+            Icons.access_time,
+            size: 20,
+          ),
+          SizedBox(
+            width: 6,
+          ),
+          Text("Son Güncelleme : ${dateStr}"),
+        ],
+      ),
+    );
+  }
+
+  Widget _locationStatus() {
+    Color locationColor = _locationSent ? Colors.green : Colors.grey;
+    String locationText = _locationSent
+        ? "Konum bilgisi paylaşıldı"
+        : "Konum bilgisi paylaşılamadı";
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Icon(
+            Icons.my_location,
+            color: locationColor,
+            size: 20,
+          ),
+          SizedBox(
+            width: 6,
+          ),
+          Text(locationText)
+        ],
+      ),
+    );
+  }
+
+  Widget _currentUserDetails() {
+    if (_registeredUser == null)
+      return Container();
+    else
+      return Row(
+        children: <Widget>[
+          Icon(
+            Icons.person,
+//            color: locationColor,
+            size: 20,
+          ),
+          SizedBox(
+            width: 6,
+          ),
+          Text("${_registeredUser.identity} olarak giriş yaptınız."),
+        ],
+      );
+  }
+
+  Widget _dangerOptions() {
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          GestureDetector(
+            onTap: () async {
+              sendDangerStatus("YARALI", true);
+            },
+            child: ClipOval(
+              child: getOptionCircle("Yaralıyım",
+                  color: dangerColor.withOpacity(0.7)),
+            ),
+          ),
+          SizedBox(
+            width: 6,
+          ),
+          GestureDetector(
+            onTap: () async {
+              sendDangerStatus("GÖÇÜK", true);
+            },
+            child: ClipOval(
+              child: getOptionCircle("Göçük Altındayım",
+                  color: dangerColor.withOpacity(0.7)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getOptionCircle(String text, {Color color}) {
+    if (color == null) color = Colors.grey;
+    return ClipOval(
+      child: Container(
+        padding: EdgeInsets.all(2),
+        color: color,
+        height: 64.0,
+        // height of the button
+        width: 64.0,
+        // width of the button
+        child: Center(
+            child: Text(text,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12))),
+      ),
+    );
   }
 
   void sendStatus(bool status) async {
@@ -173,29 +304,6 @@ class _MainPageState extends State<MainPage> {
           backgroundColor: Colors.grey.withOpacity(0.9),
           textColor: Colors.white,
           fontSize: 16.0);
-  }
-
-  Widget _getOptions() {
-    if (_registeredUser == null || _registeredUser.lastUpdateTime == 0)
-      return Container();
-
-    return _registeredUser.status == -1 ? _dangerOptions() : Container();
-  }
-
-  Widget _lastStatus() {
-    if (_registeredUser == null ||
-        _registeredUser.lastUpdateTime == null ||
-        _registeredUser.lastUpdateTime == 0) return Container();
-
-    DateTime lastUpdated =
-        DateTime.fromMillisecondsSinceEpoch(_registeredUser.lastUpdateTime);
-
-    String dateStr =
-        "${lastUpdated.year.toString()}-${lastUpdated.month.toString().padLeft(2, '0')}-${lastUpdated.day.toString().padLeft(2, '0')} ${lastUpdated.hour.toString().padLeft(2, '0')}:${lastUpdated.minute.toString().padLeft(2, '0')}";
-    return Container(
-        child: Column(
-      children: <Widget>[Text("Son Güncelleme : ${dateStr}")],
-    ));
   }
 
   void _actionsPopUpMenu(Choice choice) async {
@@ -229,53 +337,6 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  Widget _dangerOptions() {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          GestureDetector(
-            onTap: () async {
-              sendDangerStatus("YARALI", true);
-            },
-            child: ClipOval(
-              child: Container(
-                color: Colors.red,
-                height: 60.0, // height of the button
-                width: 60.0, // width of the button
-                child: Center(
-                    child: Text('Yaralıyım',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12))),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () async {
-              sendDangerStatus("GÖÇÜK", true);
-            },
-            child: ClipOval(
-              child: Container(
-                color: Colors.red,
-                height: 60.0, // height of the button
-                width: 60.0, // width of the button
-                child: Center(
-                    child: Text('Göçük Altındayım',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12))),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   void sendDangerStatus(String dangerStatus, bool value) async {
     bool result = await deviceApi
         .sendAttribute(_deviceCredentials.deviceId, {dangerStatus: value});
@@ -289,6 +350,27 @@ class _MainPageState extends State<MainPage> {
           backgroundColor: Colors.grey.withOpacity(0.9),
           textColor: Colors.white,
           fontSize: 16.0);
+  }
+
+  void _getCurrentLocation() async {
+    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      deviceApi.sendAttribute(_deviceCredentials.deviceId, {
+        "latitude": position.latitude,
+        "longitude": position.longitude,
+      }).then((res) {
+        if (res)
+          setState(() {
+            _locationSent = true;
+//        _currentPosition = position;
+          });
+      });
+    }).catchError((e) {
+      print(e);
+    });
   }
 }
 
