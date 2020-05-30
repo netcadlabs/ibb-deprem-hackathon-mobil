@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 
+import 'duyurular_page.dart';
+
 class MainPage extends StatefulWidget {
   @override
   _MainPageState createState() => _MainPageState();
@@ -235,6 +237,22 @@ class _MainPageState extends State<MainPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => YakinlarimPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.announcement,
+                color: Colors.grey,
+              ),
+              title: Text('Duyurular'),
+              onTap: () {
+                print("Duyurular tıklandı");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DuyurularPage(),
                   ),
                 );
               },

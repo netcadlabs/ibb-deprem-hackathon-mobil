@@ -19,11 +19,11 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _auth.getRelatives().then((value) {
-      setState(() {
-        _relativeList = value;
-      });
-    });
+//    _auth.getRelatives().then((value) {
+//      setState(() {
+//        _relativeList = value;
+//      });
+//    });
   }
 
   @override
@@ -43,7 +43,7 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
 //          backgroundColor: DersDetayRenkleri.yorumGenelRengi,
           child: Icon(Icons.person_add),
           onPressed: () {
-            _yakinEklemeDialogGoster(context);
+            _addNewRelativeDialog(context);
           }),
     );
   }
@@ -57,17 +57,14 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
             child: CircularProgressIndicator(),
           );
         }
-
         if (snapshot.data == null) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-
         if (snapshot.data.length == 0) {
           return Center(child: Text("Bulunamadı"));
         }
-
         return ListView.builder(
           itemCount: snapshot.data.length,
           itemBuilder: (context, index) {
@@ -77,6 +74,7 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
               child: GestureDetector(
                 onTap: () {
                   print("${identifier} tıklandı...");
+                  _relativeDetailShow(context);
                 },
                 child: Container(
                     padding: EdgeInsets.all(5),
@@ -113,13 +111,71 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
 
   TextEditingController _textFieldController = TextEditingController();
 
-  _yakinEklemeDialogGoster(BuildContext context) async {
+  _addNewRelativeDialog(BuildContext context) async {
     return showDialog(
         context: context,
         builder: (context) {
+          TextEditingController _textFieldController = TextEditingController();
+          final _textKey = GlobalKey<FormState>();
           return AlertDialog(
             title: Text('Yeni Yakın Ekle'),
             content: TextField(
+              key: _textKey,
+              keyboardType: TextInputType.number,
+              controller: _textFieldController,
+              decoration: InputDecoration(hintText: "Kimlik Numarası Giriniz"),
+              maxLines: 1,
+              maxLength: 11,
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('İptal'),
+                onPressed: () {
+                  _textFieldController.clear();
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text('Ekle'),
+                onPressed: () async {
+                  String yorum = _textFieldController.text;
+                  if (yorum != null && yorum.length >= 5) {
+                    print("$yorum");
+
+                    List<String> list = await _auth.addRelative(yorum);
+                    setState(() {
+                      _relativeList = list;
+                    });
+//                    String mesaj = "Yorum eklendi";
+//                    Color color = Colors.grey;
+//                    Fluttertoast.showToast(
+//                        msg: mesaj,
+//                        toastLength: Toast.LENGTH_LONG,
+//                        gravity: ToastGravity.CENTER,
+//                        timeInSecForIosWeb: 1,
+//                        backgroundColor: color,
+//                        textColor: Colors.white,
+//                        fontSize: 16.0);
+                    _textFieldController.clear();
+                    Navigator.of(context).pop();
+                  }
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  _relativeDetailShow(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          TextEditingController _textFieldController = TextEditingController();
+          final _textKey = GlobalKey<FormState>();
+          return AlertDialog(
+            title: Text('Yeni Yakın Ekle'),
+            content: TextField(
+              key: _textKey,
               keyboardType: TextInputType.number,
               controller: _textFieldController,
               decoration: InputDecoration(hintText: "Kimlik Numarası Giriniz"),
