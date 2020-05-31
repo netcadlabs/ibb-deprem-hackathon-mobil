@@ -32,8 +32,8 @@ class DeviceDetails {
   DeviceDetails({this.status, this.lastSeen});
 
   DeviceDetails.fromJson(Map json)
-      : status = json["status"] == null ? 0 : int.parse(json["status"]),
-        lastSeen = json["lastSeen"] == null ? 0 : int.parse(json["lastSeen"]);
+      : status = json["status"] == null ? 0 : int.parse(json["status"].toString()),
+        lastSeen = json["lastSeen"] == null ? 0 : int.parse(json["lastSeen"].toString());
 }
 
 class AuthUser {

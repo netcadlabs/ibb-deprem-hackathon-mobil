@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: <Widget>[
                   Text(
-                    "Sesimi Duyan Var Mı ?",
+                    "Uygulama Adı ?",
                     style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(

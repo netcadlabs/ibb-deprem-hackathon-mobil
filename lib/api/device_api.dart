@@ -44,19 +44,22 @@ class DeviceApi extends BaseApi {
 
   Future<DeviceDetails> getRegisteredDeviceDetails(identifier) async {
     String path = "api/mobile/details?name=${identifier}";
+    DeviceDetails deviceDetails;
 
-    var response = await provider.get(path);
-
-    var data;
-    if (response.body != null && response.body != "")
+    try {
+      var response = await provider.get(path);
       var data = jsonDecode(response.body);
 
-    if (response.statusCode != 200) {
-      print('API getRegisteredDeviceDetails Error : $data');
+      if (response.statusCode != 200) {
+        print('API getRegisteredDeviceDetails Error : $data');
+        return Future.value(null);
+      }
+
+      deviceDetails = DeviceDetails.fromJson(data);
+      return Future.value(deviceDetails);
+    } catch (error) {
+      print('API getRegisteredDeviceDetails Parse Error : $error');
       return Future.value(null);
     }
-
-    DeviceDetails deviceDetails = DeviceDetails.fromJson(data);
-    return Future.value(deviceDetails);
   }
 }

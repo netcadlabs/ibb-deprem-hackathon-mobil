@@ -21,13 +21,7 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-//    _auth.getRelatives().then((value) {
-//      setState(() {
-//        _relativeList = value;
-//      });
-//    });
   }
 
   @override
@@ -44,7 +38,6 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
         child: _getRelativesList(),
       ),
       floatingActionButton: FloatingActionButton(
-//          backgroundColor: DersDetayRenkleri.yorumGenelRengi,
           child: Icon(Icons.person_add),
           onPressed: () {
             _addNewRelativeDialog(context);
@@ -67,7 +60,11 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
           );
         }
         if (snapshot.data.length == 0) {
-          return Center(child: Text("Yakınlarım Listesi Boş"));
+          return Center(
+              child: Text(
+            "Yakınlarım Listesi Boş",
+            textAlign: TextAlign.center,
+          ));
         }
         return ListView.builder(
           itemCount: snapshot.data.length,
@@ -77,13 +74,12 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
               key: UniqueKey(),
               child: GestureDetector(
                 onTap: () {
-                  print("${identifier} tıklandı...");
                   _relativeDetailShow(context, identifier);
                 },
                 child: Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(color: Colors.blueGrey),
-                    height: 50,
+                    height: 55,
                     child: Row(
                       children: <Widget>[
                         Text(
@@ -95,8 +91,6 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
                     )),
               ),
               confirmDismiss: (direction) async {
-                if (direction == DismissDirection.startToEnd) return false;
-
                 if (direction == DismissDirection.endToStart)
                   return await _auth.removeRelative(identifier);
                 return false;

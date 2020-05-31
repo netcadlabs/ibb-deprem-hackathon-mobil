@@ -222,14 +222,18 @@ class _MainPageState extends State<MainPage> {
                     SizedBox(
                       width: 10,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          userIdentity,
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                      ],
+                    Container(
+                      height: 45,
+                      child: Column(
+//                        crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            userIdentity,
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -242,7 +246,6 @@ class _MainPageState extends State<MainPage> {
               ),
               title: Text('Yakınlarım'),
               onTap: () {
-                print("Yakınlarım tıklandı");
                 Navigator.push(
                   context,
                   MaterialPageRoute(

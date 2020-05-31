@@ -5,10 +5,9 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 
 class NDUApiProvider {
-//  static const _BASE_URL = "https://smartapp.netcad.com";
-  static const _BASE_URL = "http://192.168.1.2:8080";
-  static String _TOKEN = "";
+  static const _BASE_URL = Constants.NDU_HOST;
 
+//  static String _TOKEN = "";
   NDUApiProvider._privateConstructor();
 
   static final NDUApiProvider _instance = NDUApiProvider._privateConstructor();
@@ -17,8 +16,8 @@ class NDUApiProvider {
 
   static init(String apiKey) {
     if (apiKey != null && apiKey != "") {
-      _TOKEN = apiKey;
-      _headers["X-Authorization"] = 'Barear $_TOKEN';
+//      _TOKEN = apiKey;
+//      _headers["X-Authorization"] = 'Barear $_TOKEN';
     }
   }
 
@@ -30,10 +29,9 @@ class NDUApiProvider {
   Future<http.Response> get(String path) async {
     try {
       String url = "$_BASE_URL/$path";
-      print("Sending post request to $url");
+      print("Sending get request to $url");
 
-      final responseBody =
-          await http.get('$url', headers: _headers);
+      final responseBody = await http.get('$url', headers: _headers);
       return responseBody;
     } on SocketException {
       throw Exception('No Internet connection');
