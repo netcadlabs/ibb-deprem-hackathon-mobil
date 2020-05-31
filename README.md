@@ -1,4 +1,4 @@
-# Netcad Innovation Labs - IBB Deprem Hackathon Uygulaması
+# Deprem.Net
 
 Bu proje İstanbul Büyükşehir Belediyesi tarafından düzenlenen [Deprem Hackatonu](https://depremhackathonu.ibb.istanbul/) kapsamında geliştirilmiştir.
 
@@ -24,4 +24,7 @@ uygulama tarafından üretilen verilerin görüntülenmesi ve analizi bu platfor
 | <img src="https://github.com/netcadlabs/ibb-deprem-hackathon-mobil/blob/master/files/Screenshot_1590939722.png"  height="200"/>   | <img src="https://github.com/netcadlabs/ibb-deprem-hackathon-mobil/blob/master/files/Screenshot_1590939820.png"  height="200"/> | 
 
 ## Video
-[Android Ekran Kaydı - Video](https://github.com/netcadlabs/ibb-deprem-hackathon-mobil/blob/master/files/Screen%20Recording%202020-05-31%20at%2019.51.00.mov) 
+
+[Deprem.Net](https://github.com/netcadlabs/ibb-deprem-hackathon-mobil/blob/master/files/Screen%20Recording%202020-05-31%20at%2019.51.00.mov) 
+
+[Web Uygulaması](https://github.com/netcadlabs/ibb-deprem-hackathon-mobil/blob/master/files/Screen%20Recording%20%20Platform.mov?raw=true) 
