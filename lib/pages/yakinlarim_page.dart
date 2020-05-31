@@ -191,7 +191,7 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
         if (deviceDetails.status == 1) {
           durum = "Güvende";
         } else if (deviceDetails.status == -1) {
-          durum = "Güvende Değil";
+          durum = "Yardım Bekliyor";
         }
       }
 

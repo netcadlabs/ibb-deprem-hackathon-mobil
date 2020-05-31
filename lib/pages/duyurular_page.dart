@@ -71,12 +71,19 @@ class _DuyurularPageState extends State<DuyurularPage> {
                       Text(
                         announcement.title,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.redAccent),
+                      ),
+                      SizedBox(
+                        height: 5,
                       ),
                       Text(
                         announcement.message,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
+                        style: TextStyle(fontSize: 14, color: Colors.white),
+                      ),
+                      SizedBox(
+                        height: 5,
                       ),
                       Container(
                         child: Row(
