@@ -207,12 +207,19 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
                     Row(
                       children: <Widget>[Text("Durum : "), Text(durum)],
                     ),
+                    SizedBox(
+                      height: 3,
+                    ),
                     Row(
                       children: <Widget>[
                         Text("Son Güncelleme : "),
                         Text(dateStr)
                       ],
-                    )
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    _getHaritaButton(deviceDetails)
                   ],
                 ),
               ),
@@ -227,5 +234,35 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
             );
           });
     });
+  }
+
+  Widget _getHaritaButton(DeviceDetails deviceDetails) {
+    if (deviceDetails == null ||
+        deviceDetails.lat == 0 ||
+        deviceDetails.lon == 0) return Container();
+
+    Color color = Colors.green;
+    if (deviceDetails.status == -1) color = Colors.redAccent;
+
+    return Container(
+      child: RaisedButton(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              Icons.map,
+              color: color,
+            ),
+            SizedBox(
+              width: 6,
+            ),
+            Text("Konumu Haritada Göster"),
+          ],
+        ),
+        onPressed: () {
+          MapUtils.openMap(deviceDetails.lat, deviceDetails.lon);
+        },
+      ),
+    );
   }
 }

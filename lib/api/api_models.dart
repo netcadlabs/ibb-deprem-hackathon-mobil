@@ -28,6 +28,8 @@ class DeviceCredentials {
 class DeviceDetails {
   int status;
   int lastSeen;
+  double lat;
+  double lon;
 
   DeviceDetails({this.status, this.lastSeen});
 
@@ -36,7 +38,9 @@ class DeviceDetails {
             json["status"] == null ? 0 : int.parse(json["status"].toString()),
         lastSeen = json["lastSeen"] == null
             ? 0
-            : int.parse(json["lastSeen"].toString());
+            : int.parse(json["lastSeen"].toString()),
+        lat = json["lat"] == null ? 0 : double.parse(json["lat"].toString()),
+        lon = json["lon"] == null ? 0 : double.parse(json["lon"].toString());
 }
 
 class Announcement {

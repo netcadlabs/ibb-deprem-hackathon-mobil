@@ -7,6 +7,7 @@ class Logolar extends StatelessWidget {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           ClipRRect(
             borderRadius: BorderRadius.circular(40.0),
@@ -20,15 +21,22 @@ class Logolar extends StatelessWidget {
           SizedBox(
             width: 16,
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(2.0),
-            child: Container(
-              child: Image.asset(
-                "assets/images/nils.png",
-                fit: BoxFit.fill,
-              ),
+//          ClipRRect(
+//            borderRadius: BorderRadius.circular(2.0),
+//            child: Container(
+//              child: Image.asset(
+//                "assets/images/nils.png",
+//                fit: BoxFit.fill,
+//              ),
+//            ),
+//          ),
+          Container(
+            height: 40,
+            child: Image.asset(
+              "assets/images/nils.png",
+              fit: BoxFit.fill,
             ),
-          ),
+          )
         ],
       ),
     );

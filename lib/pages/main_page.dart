@@ -163,7 +163,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
                 Container(
-                  height: 70,
+                  height: 80,
                   child: Logolar(),
                 ),
                 SizedBox(height: 10,),
