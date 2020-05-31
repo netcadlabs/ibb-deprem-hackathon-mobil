@@ -160,7 +160,8 @@ class _LoginPageState extends State<LoginPage> {
     if (identityNumberController.text == "") return null;
     if (_isLoading) return;
 
-    if (int.tryParse(identityNumberController.text) == null) return;
+    if (identityNumberController.text.length < 11 ||
+        int.tryParse(identityNumberController.text) == null) return;
 
     setState(() {
       _isLoading = true;
@@ -190,7 +191,6 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           TextFormField(
             keyboardType: TextInputType.number,
-
             controller: identityNumberController,
             maxLength: 11,
             style: TextStyle(color: Colors.black),
@@ -201,18 +201,6 @@ class _LoginPageState extends State<LoginPage> {
                   borderSide: BorderSide(color: Colors.deepPurple)),
             ),
           ),
-//          SizedBox(height: 30.0),
-//          TextFormField(
-//            controller: passwordController,
-//            obscureText: true,
-//            style: TextStyle(color: Colors.black),
-//            decoration: InputDecoration(
-//              icon: Icon(Icons.lock, color: Colors.deepPurple),
-//              hintText: "Password",
-//              border: UnderlineInputBorder(
-//                  borderSide: BorderSide(color: Colors.deepPurple)),
-//            ),
-//          ),
         ],
       ),
     );

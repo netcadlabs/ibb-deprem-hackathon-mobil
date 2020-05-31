@@ -139,8 +139,11 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
                 child: new Text('Ekle'),
                 onPressed: () async {
                   String relativeIdentity = _textFieldController.text;
+
                   if (relativeIdentity != null &&
-                      relativeIdentity.length == 11) {
+                      relativeIdentity.length >= 11 &&
+                      int.tryParse(relativeIdentity) != null) {
+
                     print("$relativeIdentity");
 
                     List<String> list =
