@@ -6,11 +6,11 @@ class Logolar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           ClipRRect(
-            borderRadius: BorderRadius.circular(40.0),
+            borderRadius: BorderRadius.circular(25.0),
             child: Container(
               child: Image.asset(
                 "assets/images/istanbul.png",

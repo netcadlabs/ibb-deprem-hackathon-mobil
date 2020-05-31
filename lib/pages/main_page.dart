@@ -111,16 +111,14 @@ class _MainPageState extends State<MainPage> {
                   },
                   child: ClipOval(
                     child: Container(
-                      color: safeColor,
+//                      decoration: BoxDecoration(
+//                        border: Border.all(),
+//                        color: safeColor,
+//                      ),
+                      color: _getSafeColor(),
                       height: getCircleSize(1, 120, 90),
                       width: getCircleSize(1, 120, 90),
-                      child: Center(
-                          child: Text(
-                        'Güvendeyim',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      )),
+                      child: Center(child: getSafeCircle()),
                     ),
                   ),
                 )),
@@ -137,15 +135,10 @@ class _MainPageState extends State<MainPage> {
                   },
                   child: ClipOval(
                     child: Container(
-                      color: dangerColor,
+                      color: _getDangerColor(),
                       height: getCircleSize(-1, 120, 90),
                       width: getCircleSize(-1, 120, 90),
-                      child: Center(
-                          child: Text('Yardım İstiyorum',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold))),
+                      child: Center(child: getDangerCircle()),
                     ),
                   ),
                 )),
@@ -179,6 +172,90 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Color _getDangerColor() {
+    if (_registeredUser != null && _registeredUser.status == -1)
+      return dangerColor;
+    else
+      return dangerColor.withOpacity(0.7);
+  }
+
+  Color _getSafeColor() {
+    if (_registeredUser != null && _registeredUser.status == 1)
+      return safeColor;
+    else
+      return safeColor.withOpacity(0.7);
+  }
+
+  Widget getSafeCircle() {
+    if (_registeredUser != null && _registeredUser.status == 1)
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.check_circle,
+            size: 30,
+            color: Colors.white,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'Güvendeyim',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ],
+      );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Güvendeyim',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  Widget getDangerCircle() {
+    if (_registeredUser != null && _registeredUser.status == -1)
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.warning,
+            size: 30,
+            color: Colors.white,
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Text(
+            'Yardım İstiyorum',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ],
+      );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Yardım İstiyorum',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ],
     );
   }
 

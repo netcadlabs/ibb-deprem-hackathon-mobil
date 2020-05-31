@@ -85,7 +85,7 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
           TextEditingController _textFieldController = TextEditingController();
           final _textKey = GlobalKey<FormState>();
           return AlertDialog(
-            title: Text('Yeni Yakın Ekle'),
+            title: Text('Yeni Kişi Ekle'),
             content: TextField(
               key: _textKey,
               keyboardType: TextInputType.number,

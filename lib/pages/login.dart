@@ -68,22 +68,37 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               child: Column(
                 children: <Widget>[
+                  Container(
+                    height: 80,
+//                    color: Colors.black,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(40.0),
+                      child: Container(
+                        child: Image.asset(
+                          "assets/images/logo.png",
+                          fit: BoxFit.fill,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ),
                   Text(
-                    "Uygulama Adı ?",
+                    "Deprem.Net",
                     style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 30,
                   ),
                   Text(
-                    "Açıklama: Afet anında vatandaşların yakınları ile güvende oldukları bilgisini paylaşabilecekleri ve yardım isteyebilecekleri, belediye birimlerinin duyurularını ve toplanma alanlarının yerlerini görebilecekleri uygulama",
+                    "Afet anında yakınlarınıza güvende olduğunuzu bildirin ya da yetkililerden yardım isteyin. Belediye birimlerinin duyurularını ve toplanma alanlarının yerlerini takip edin.",
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
               ),
             ),
             SizedBox(
-              height: 60,
+              height: 40,
             ),
             formSection(),
             buttonSection(),
