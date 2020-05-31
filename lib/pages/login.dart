@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
-import 'package:depremhackathon/api/device_api.dart';
-import 'package:depremhackathon/services/authenction_service.dart';
 import 'package:device_info/device_info.dart';
+import 'package:undisaster/api/device_api.dart';
+import 'package:undisaster/services/authenction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
 
 //  final MQTTClientWrapper _mqttClientWrapper = locator<MQTTClientWrapper>();
   final Connectivity _connectivity = Connectivity();
-  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  StreamSubscription<ConnectivityResult> connectivitySubscription;
   ConnectivityResult _connectivityResult = ConnectivityResult.none;
   final DeviceApi deviceApi = DeviceApi();
 
@@ -30,15 +30,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     initConnectivity();
-    _connectivitySubscription =
+    connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-
-//    _mqttClientWrapper.addConnectionListener(() {
-//      setState(() {});
-//    });
-//    _mqttClientWrapper.addDisConnectionListener(() {
-//      setState(() {});
-//    });
   }
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
@@ -83,8 +76,8 @@ class _LoginPageState extends State<LoginPage> {
                     height: 10,
                   ),
                   Text(
-                    "Uygulama hakkında kısa kısa açıklama..",
-                    style: TextStyle(fontSize: 21),
+                    "Açıklama: Afet anında vatandaşların yakınları ile güvende oldukları bilgisini paylaşabilecekleri ve yardım isteyebilecekleri, belediye birimlerinin duyurularını ve toplanma alanlarının yerlerini görebilecekleri uygulama",
+                    style: TextStyle(fontSize: 16),
                   ),
                 ],
               ),

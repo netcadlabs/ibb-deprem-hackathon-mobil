@@ -1,4 +1,4 @@
-import 'package:depremhackathon/api/base_api.dart';
+import 'package:undisaster/api/base_api.dart';
 
 import 'api_models.dart';
 
@@ -34,7 +34,7 @@ class AnnouncementApi extends BaseApi {
     return Future.value(fakeList);
   }
 
-  void addAnnouncement(Announcement) {
+  void addAnnouncement(announcement) {
     //TODO - duyuruyu local storage'a kaydet'
   }
 

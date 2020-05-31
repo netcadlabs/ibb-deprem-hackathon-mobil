@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
-import 'package:depremhackathon/api/api_models.dart';
-import 'package:depremhackathon/api/ndu_api_provider.dart';
-import 'package:http/http.dart' as http;
+import 'package:undisaster/api/api_models.dart';
+import 'package:undisaster/api/ndu_api_provider.dart';
 
 abstract class BaseApi{
   NDUApiProvider provider = NDUApiProvider.instance;

@@ -1,10 +1,10 @@
-import 'package:depremhackathon/api/api_models.dart';
-import 'package:depremhackathon/api/device_api.dart';
-import 'package:depremhackathon/locator.dart';
-import 'package:depremhackathon/pages/login.dart';
-import 'package:depremhackathon/pages/yakinlarim_page.dart';
-import 'package:depremhackathon/services/authenction_service.dart';
-import 'package:depremhackathon/styles/common_styles.dart';
+import 'package:undisaster/api/api_models.dart';
+import 'package:undisaster/api/device_api.dart';
+import 'package:undisaster/locator.dart';
+import 'package:undisaster/pages/login.dart';
+import 'package:undisaster/pages/yakinlarim_page.dart';
+import 'package:undisaster/services/authenction_service.dart';
+import 'package:undisaster/styles/common_styles.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,17 +40,12 @@ class _MainPageState extends State<MainPage> {
   String userIdentity = "-";
 
   @override
-  Future<void> initState() {
+  void initState() {
     super.initState();
-//    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-//    deviceInfo.androidInfo.then((value) {
-//      _androidDeviceInfo = value;
-//    });
     _auth.currentDeviceCredentials().then((value) {
       setState(() {
         _deviceCredentials = value;
       });
-
       _getCurrentLocation();
     });
 
@@ -408,7 +403,7 @@ class _MainPageState extends State<MainPage> {
           SizedBox(
             width: 6,
           ),
-          Text("Son Güncelleme : ${dateStr}"),
+          Text("Son Güncelleme : $dateStr"),
         ],
       ),
     );
@@ -436,24 +431,23 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _currentUserDetails() {
-    if (_registeredUser == null)
-      return Container();
-    else
-      return Row(
-        children: <Widget>[
-          Icon(
-            Icons.person,
-//            color: locationColor,
-            size: 20,
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          Text("${_registeredUser.identity} olarak giriş yaptınız."),
-        ],
-      );
-  }
+//  Widget _currentUserDetails() {
+//    if (_registeredUser == null)
+//      return Container();
+//    else
+//      return Row(
+//        children: <Widget>[
+//          Icon(
+//            Icons.person,
+//            size: 20,
+//          ),
+//          SizedBox(
+//            width: 6,
+//          ),
+//          Text("${_registeredUser.identity} olarak giriş yaptınız."),
+//        ],
+//      );
+//  }
 
   Widget getOptionCircle(String text, {Color color}) {
     if (color == null) color = Colors.grey;

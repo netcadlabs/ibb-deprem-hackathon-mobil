@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
-import 'package:depremhackathon/constants.dart';
+import 'package:undisaster/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 

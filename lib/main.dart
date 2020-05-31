@@ -1,6 +1,6 @@
-import 'package:depremhackathon/pages/login.dart';
-import 'package:depremhackathon/pages/main_page.dart';
-import 'package:depremhackathon/services/authenction_service.dart';
+import 'package:undisaster/pages/login.dart';
+import 'package:undisaster/pages/main_page.dart';
+import 'package:undisaster/services/authenction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

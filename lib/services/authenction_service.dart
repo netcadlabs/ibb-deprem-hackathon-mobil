@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:depremhackathon/api/api_models.dart';
+import 'package:undisaster/api/api_models.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -89,7 +89,7 @@ class AuthenticationService {
     List<String> relativeList = prefs.getStringList(_RELATIVES);
     if (relativeList != null)
       relativeList.forEach((identifier) {
-        prefs.remove("status-${identifier}");
+        prefs.remove("status-$identifier");
       });
     prefs.remove(_RELATIVES);
 
@@ -101,7 +101,7 @@ class AuthenticationService {
   Future<bool> removeRelative(String identifier) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    prefs.remove("status-${identifier}");
+    prefs.remove("status-$identifier");
     List<String> list = prefs.getStringList(_RELATIVES);
     if (list == null) return false;
 

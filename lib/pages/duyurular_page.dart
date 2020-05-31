@@ -1,6 +1,6 @@
-import 'package:depremhackathon/api/announcement_api.dart';
-import 'package:depremhackathon/api/api_models.dart';
-import 'package:depremhackathon/styles/common_styles.dart';
+import 'package:undisaster/api/announcement_api.dart';
+import 'package:undisaster/api/api_models.dart';
+import 'package:undisaster/styles/common_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

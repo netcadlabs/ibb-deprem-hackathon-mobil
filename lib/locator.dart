@@ -1,5 +1,4 @@
-import 'package:depremhackathon/services/authenction_service.dart';
-import 'package:depremhackathon/services/mqtt_client_wrapper.dart';
+import 'package:undisaster/services/authenction_service.dart';
 import 'package:get_it/get_it.dart';
 
 GetIt locator = GetIt.instance;

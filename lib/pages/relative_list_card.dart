@@ -1,7 +1,7 @@
-import 'package:depremhackathon/api/api_models.dart';
-import 'package:depremhackathon/api/device_api.dart';
-import 'package:depremhackathon/services/authenction_service.dart';
-import 'package:depremhackathon/styles/common_styles.dart';
+import 'package:undisaster/api/api_models.dart';
+import 'package:undisaster/api/device_api.dart';
+import 'package:undisaster/services/authenction_service.dart';
+import 'package:undisaster/styles/common_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,16 +23,16 @@ class _RelativeListCardState extends State<RelativeListCard> {
   final AuthenticationService _auth = locator<AuthenticationService>();
   int currentStatus;
   SharedPreferences _sharedPreferences;
-  String _STATUS_KEY;
+  String statusKey;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _STATUS_KEY = "status-${widget.identity}";
+    statusKey = "status-${widget.identity}";
     SharedPreferences.getInstance().then((sharedPrefs) {
       _sharedPreferences = sharedPrefs;
-      int state = sharedPrefs.getInt(_STATUS_KEY);
+      int state = sharedPrefs.getInt(statusKey);
       if (state != null)
         setState(() {
           currentStatus = state;
@@ -183,7 +183,7 @@ class _RelativeListCardState extends State<RelativeListCard> {
                     Navigator.of(context).pop();
                     if (deviceDetails != null) {
                       _sharedPreferences.setInt(
-                          _STATUS_KEY, deviceDetails.status);
+                          statusKey, deviceDetails.status);
                       setState(() {
                         currentStatus = deviceDetails.status;
                       });

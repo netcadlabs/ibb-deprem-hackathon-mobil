@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:depremhackathon/constants.dart';
+import 'package:undisaster/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -82,7 +82,7 @@ class MQTTClientWrapper {
     final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
     builder.addString(message);
 
-    print('MQTTClientWrapper::Publishing message $message to topic ${topic}');
+    print('MQTTClientWrapper::Publishing message $message to topic $topic');
     client.publishMessage(topic, MqttQos.exactlyOnce, builder.payload);
   }
 
@@ -96,8 +96,6 @@ class MQTTClientWrapper {
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       print("MQTTClientWrapper::GOT A NEW MESSAGE $newData");
     });
-
-//    onMessageReceived("newLocationJson");
   }
 
   void _onConnected() {
