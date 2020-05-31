@@ -13,6 +13,7 @@ import 'package:geolocator/geolocator.dart';
 
 import '../utils.dart';
 import 'duyurular_page.dart';
+import 'logo_widget.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -128,9 +129,9 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                 )),
-                Container(
-                  child: _getSafeOptions(),
-                ),
+//                Container(
+//                  child: _getSafeOptions(),
+//                ),
                 SizedBox(
                   height: 50,
                 ),
@@ -145,7 +146,7 @@ class _MainPageState extends State<MainPage> {
                       height: getCircleSize(-1, 120, 90),
                       width: getCircleSize(-1, 120, 90),
                       child: Center(
-                          child: Text('Güvende Değilim',
+                          child: Text('Yardım İstiyorum',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.white,
@@ -157,8 +158,15 @@ class _MainPageState extends State<MainPage> {
                   child: _getDangerOptions(),
                 ),
                 Expanded(
-                  child: Container(),
+                  child: Container(
+
+                  ),
                 ),
+                Container(
+                  height: 70,
+                  child: Logolar(),
+                ),
+                SizedBox(height: 10,),
                 Container(
                   margin: EdgeInsets.only(bottom: 5),
                   child: _lastStatus(),
@@ -179,7 +187,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   Color getCurrentBackgroundColor() {
-    if (_registeredUser == null || _registeredUser.status == 0) return Colors.grey;
+    if (_registeredUser == null || _registeredUser.status == 0)
+      return Colors.grey;
 
     return _registeredUser.status == 1
         ? safeBackgroundColor
@@ -226,7 +235,7 @@ class _MainPageState extends State<MainPage> {
                       height: 45,
                       child: Column(
 //                        crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
                             userIdentity,
@@ -327,6 +336,19 @@ class _MainPageState extends State<MainPage> {
                   },
                   child: ClipOval(
                     child: getOptionCircle("Göçük Altındayım",
+                        color: dangerColor.withOpacity(0.7)),
+                  ),
+                ),
+                SizedBox(
+                  width: 6,
+                ),
+                GestureDetector(
+                  onTap: () async {
+//                    sendDangerStatus("GÖÇÜK", true);
+                    _showNewMessageDialog(context);
+                  },
+                  child: ClipOval(
+                    child: getOptionCircle("Diğer",
                         color: dangerColor.withOpacity(0.7)),
                   ),
                 ),
@@ -508,6 +530,64 @@ class _MainPageState extends State<MainPage> {
             MaterialPageRoute(builder: (context) => LoginPage()),
             (Route<dynamic> route) => false);
     }
+  }
+
+  void _showNewMessageDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          TextEditingController _textFieldController = TextEditingController();
+          final _textKey = GlobalKey<FormState>();
+          return AlertDialog(
+            title: Text('Mesaj Gönder'),
+            content: TextField(
+                key: _textKey,
+                keyboardType: TextInputType.number,
+                controller: _textFieldController,
+                decoration:
+                    InputDecoration(hintText: "Yardım isteğinizi yazınız.."),
+                maxLines: 3),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('İptal'),
+                onPressed: () {
+                  _textFieldController.clear();
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text('Gönder'),
+                onPressed: () async {
+                  String yorum = _textFieldController.text;
+                  if (yorum != null && yorum.length >= 5) {
+                    print("$yorum");
+
+                    bool result = await deviceApi.sendAttribute(
+                        _deviceCredentials.deviceId, {"MESAJ": yorum});
+
+                    String mesaj = "Mesaj gönderildi";
+                    Color color = Colors.grey;
+                    if (!result) {
+                      mesaj = "Mesaj Gönderilemedi!";
+                      color = Colors.redAccent;
+                    }
+
+                    Fluttertoast.showToast(
+                        msg: mesaj,
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: color,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                    _textFieldController.clear();
+                    Navigator.of(context).pop();
+                  }
+                },
+              )
+            ],
+          );
+        });
   }
 
   void sendDangerStatus(String dangerStatus, bool value) async {
