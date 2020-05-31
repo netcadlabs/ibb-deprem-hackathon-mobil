@@ -179,7 +179,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Color getCurrentBackgroundColor() {
-    if (_registeredUser == null) return Colors.grey;
+    if (_registeredUser == null || _registeredUser.status == 0) return Colors.grey;
 
     return _registeredUser.status == 1
         ? safeBackgroundColor
@@ -242,7 +242,7 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: Icon(
                 Icons.supervisor_account,
-                color: Colors.grey,
+                color: Theme.of(context).primaryColor,
               ),
               title: Text('Yakınlarım'),
               onTap: () {
@@ -257,7 +257,7 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: Icon(
                 Icons.announcement,
-                color: Colors.grey,
+                color: Theme.of(context).primaryColor,
               ),
               title: Text('Duyurular'),
               onTap: () {
@@ -273,7 +273,7 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: Icon(
                 Icons.map,
-                color: Colors.grey,
+                color: Theme.of(context).primaryColor,
               ),
               title: Text('Toplanma Alanları'),
               onTap: () {
@@ -281,13 +281,13 @@ class _MainPageState extends State<MainPage> {
               },
             ),
             Divider(
-              color: Colors.grey,
+              color: Theme.of(context).accentColor,
               thickness: 1,
             ),
             ListTile(
               leading: Icon(
                 Icons.help,
-                color: Colors.grey,
+                color: Theme.of(context).primaryColor,
               ),
               title: Text('Yardım'),
               onTap: () {

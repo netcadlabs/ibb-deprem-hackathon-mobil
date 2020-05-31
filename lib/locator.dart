@@ -8,5 +8,5 @@ void setupLocator() {
 //  locator.registerLazySingleton(() => NavigationService());
 //  locator.registerLazySingleton(() => PushNotificationService());
   locator.registerLazySingleton(() => AuthenticationService());
-  locator.registerLazySingleton(() => MQTTClientWrapper());
+//  locator.registerLazySingleton(() => MQTTClientWrapper());
 }

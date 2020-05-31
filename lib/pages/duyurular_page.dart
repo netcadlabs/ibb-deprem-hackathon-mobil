@@ -1,6 +1,10 @@
+import 'package:depremhackathon/api/announcement_api.dart';
+import 'package:depremhackathon/api/api_models.dart';
 import 'package:depremhackathon/styles/common_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../utils.dart';
 
 class DuyurularPage extends StatefulWidget {
   @override
@@ -8,6 +12,8 @@ class DuyurularPage extends StatefulWidget {
 }
 
 class _DuyurularPageState extends State<DuyurularPage> {
+  AnnouncementApi _announcementApi = AnnouncementApi();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -50,7 +56,7 @@ class _DuyurularPageState extends State<DuyurularPage> {
         return ListView.builder(
           itemCount: snapshot.data.length,
           itemBuilder: (context, index) {
-            final String duyuru = snapshot.data[index];
+            final Announcement announcement = snapshot.data[index];
             return GestureDetector(
               onTap: () {
 //                print("${duyuru} tıklandı...");
@@ -58,21 +64,40 @@ class _DuyurularPageState extends State<DuyurularPage> {
               child: Container(
                   padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(color: Colors.blueGrey),
-                  height: 100,
-                  child: Row(
+//                  height: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        duyuru,
+                        announcement.title,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      Text(
+                        announcement.message,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 14),
                       ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Text(
+                              Utils.formatTimeStamp(announcement.date),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 14),
+                            )
+                          ],
+                        ),
+                      )
                     ],
                   )),
             );
           },
         );
       },
-//      future: _duyuruApi.getAnnouncements(), //?? nereden? - gelen bildirimler localde saklanır oradan çekilebilir..
+      future: _announcementApi
+          .getAnnouncements(), //?? nereden? - gelen bildirimler localde saklanır oradan çekilebilir..
     );
   }
 }

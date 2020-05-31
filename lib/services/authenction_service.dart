@@ -22,7 +22,7 @@ class AuthenticationService {
     if (_registeredUser == null && identity != null) {
       _registeredUser = RegisteredUser();
       _registeredUser.identity = identity;
-      _registeredUser.status = status;
+      _registeredUser.status = status == null ? 0 : status;
       _registeredUser.lastUpdateTime = lastUpdateTime;
     }
 

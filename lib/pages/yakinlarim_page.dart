@@ -4,7 +4,6 @@ import 'package:depremhackathon/services/authenction_service.dart';
 import 'package:depremhackathon/styles/common_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../locator.dart';
 import '../utils.dart';

@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Deprem Hackathon',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        primaryColor: Colors.red
+        primaryColor: Colors.blueAccent
       ),
       home: MyHomePage(title: 'Deprem Hackathon Home Page'),
     );
