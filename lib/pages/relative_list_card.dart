@@ -87,7 +87,10 @@ class _RelativeListCardState extends State<RelativeListCard> {
         color: Colors.red,
       );
     } else {
-      return Icon(Icons.help, color: Colors.white,);
+      return Icon(
+        Icons.help,
+        color: Colors.white,
+      );
     }
   }
 
@@ -116,13 +119,33 @@ class _RelativeListCardState extends State<RelativeListCard> {
       String durum = "Bilinmiyor";
       String dateStr = "Bilinmiyor";
 
-      if (deviceDetails != null) {
-        dateStr = Utils.formatTimeStamp(deviceDetails.lastSeen);
-        if (deviceDetails.status == 1) {
-          durum = "Güvende";
-        } else if (deviceDetails.status == -1) {
-          durum = "Yardım Bekliyor";
-        }
+      if (deviceDetails == null) {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(identifier),
+                content: Container(
+                  child: Text(
+                      "Bu kimlik bilgisine sahip sisteme kayıtlı kullanıcı bulunamadı."),
+                ),
+                actions: <Widget>[
+                  new FlatButton(
+                    child: new Text('Tamam'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            });
+      }
+
+      dateStr = Utils.formatTimeStamp(deviceDetails.lastSeen);
+      if (deviceDetails.status == 1) {
+        durum = "Güvende";
+      } else if (deviceDetails.status == -1) {
+        durum = "Yardım Bekliyor";
       }
 
       return showDialog(
@@ -158,7 +181,7 @@ class _RelativeListCardState extends State<RelativeListCard> {
                   child: new Text('Tamam'),
                   onPressed: () {
                     Navigator.of(context).pop();
-                    if(deviceDetails != null){
+                    if (deviceDetails != null) {
                       _sharedPreferences.setInt(
                           _STATUS_KEY, deviceDetails.status);
                       setState(() {
