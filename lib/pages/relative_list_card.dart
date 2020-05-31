@@ -158,11 +158,13 @@ class _RelativeListCardState extends State<RelativeListCard> {
                   child: new Text('Tamam'),
                   onPressed: () {
                     Navigator.of(context).pop();
-                    _sharedPreferences.setInt(
-                        _STATUS_KEY, deviceDetails.status);
-                    setState(() {
-                      currentStatus = deviceDetails.status;
-                    });
+                    if(deviceDetails != null){
+                      _sharedPreferences.setInt(
+                          _STATUS_KEY, deviceDetails.status);
+                      setState(() {
+                        currentStatus = deviceDetails.status;
+                      });
+                    }
                   },
                 ),
               ],

@@ -87,9 +87,10 @@ class AuthenticationService {
     prefs.remove(_LAST_UPDATE);
 
     List<String> relativeList = prefs.getStringList(_RELATIVES);
-    relativeList.forEach((identifier) {
-      prefs.remove("status-${identifier}");
-    });
+    if (relativeList != null)
+      relativeList.forEach((identifier) {
+        prefs.remove("status-${identifier}");
+      });
     prefs.remove(_RELATIVES);
 
     _registeredDeviceCredentials = null;
