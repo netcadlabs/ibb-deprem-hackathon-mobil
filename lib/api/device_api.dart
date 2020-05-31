@@ -10,7 +10,7 @@ class DeviceApi extends BaseApi {
     String path = "api/mobile/device";
 
     var response = await provider.post(path,
-        {"name": identity, "type": "DEPREM-MOBIL-USER", "desc": deviceId});
+        {"name": identity, "type": "mobile", "desc": deviceId});
 
     var data = jsonDecode(response.body);
 
