@@ -1,5 +1,6 @@
 import 'package:depremhackathon/api/api_models.dart';
 import 'package:depremhackathon/api/device_api.dart';
+import 'package:depremhackathon/pages/relative_list_card.dart';
 import 'package:depremhackathon/services/authenction_service.dart';
 import 'package:depremhackathon/styles/common_styles.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,8 +34,11 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
           textAlign: TextAlign.center,
         ),
       ),
-      body: Center(
-        child: _getRelativesList(),
+      body: Container(
+        color: Theme.of(context).primaryColorLight,
+        child: Center(
+          child: _getRelativesList(),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.person_add),
@@ -69,11 +73,12 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
           itemCount: snapshot.data.length,
           itemBuilder: (context, index) {
             final String identifier = snapshot.data[index];
+            return RelativeListCard(identifier);
             return Dismissible(
               key: UniqueKey(),
               child: GestureDetector(
                 onTap: () {
-                  _relativeDetailShow(context, identifier);
+//                  _relativeDetailShow(context, identifier);
                 },
                 child: Container(
                     padding: EdgeInsets.all(5),
@@ -133,11 +138,13 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
               new FlatButton(
                 child: new Text('Ekle'),
                 onPressed: () async {
-                  String yorum = _textFieldController.text;
-                  if (yorum != null && yorum.length >= 5) {
-                    print("$yorum");
+                  String relativeIdentity = _textFieldController.text;
+                  if (relativeIdentity != null &&
+                      relativeIdentity.length == 11) {
+                    print("$relativeIdentity");
 
-                    List<String> list = await _auth.addRelative(yorum);
+                    List<String> list =
+                        await _auth.addRelative(relativeIdentity);
                     setState(() {
                       _relativeList = list;
                     });
@@ -159,110 +166,5 @@ class _YakinlarimSayfasiState extends State<YakinlarimPage> {
             ],
           );
         });
-  }
-
-  _relativeDetailShow(BuildContext context, String identifier) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: new Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              new CircularProgressIndicator(),
-              new Text("Yükleniyor"),
-            ],
-          ),
-        );
-      },
-    );
-
-    deviceApi
-        .getRegisteredDeviceDetails(identifier)
-        .then((DeviceDetails deviceDetails) {
-      Navigator.pop(context); //pop dialog
-
-      String durum = "Bilinmiyor";
-      String dateStr = "Bilinmiyor";
-
-      if (deviceDetails != null) {
-        dateStr = Utils.formatTimeStamp(deviceDetails.lastSeen);
-        if (deviceDetails.status == 1) {
-          durum = "Güvende";
-        } else if (deviceDetails.status == -1) {
-          durum = "Yardım Bekliyor";
-        }
-      }
-
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text(identifier),
-              content: Container(
-                height: 100,
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[Text("Durum : "), Text(durum)],
-                    ),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text("Son Güncelleme : "),
-                        Text(dateStr)
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    _getHaritaButton(deviceDetails)
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                new FlatButton(
-                  child: new Text('Tamam'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          });
-    });
-  }
-
-  Widget _getHaritaButton(DeviceDetails deviceDetails) {
-    if (deviceDetails == null ||
-        deviceDetails.lat == 0 ||
-        deviceDetails.lon == 0) return Container();
-
-    Color color = Colors.green;
-    if (deviceDetails.status == -1) color = Colors.redAccent;
-
-    return Container(
-      child: RaisedButton(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.map,
-              color: color,
-            ),
-            SizedBox(
-              width: 6,
-            ),
-            Text("Konumu Haritada Göster"),
-          ],
-        ),
-        onPressed: () {
-          MapUtils.openMap(deviceDetails.lat, deviceDetails.lon);
-        },
-      ),
-    );
   }
 }

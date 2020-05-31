@@ -30,8 +30,11 @@ class _DuyurularPageState extends State<DuyurularPage> {
           textAlign: TextAlign.center,
         ),
       ),
-      body: Center(
-        child: _getRelativesList(),
+      body: Container(
+        color: Theme.of(context).primaryColorLight,
+        child: Center(
+          child: _getRelativesList(),
+        ),
       ),
     );
   }

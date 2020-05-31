@@ -105,7 +105,7 @@ class _MainPageState extends State<MainPage> {
         body: Center(
           child: Container(
             color: getCurrentBackgroundColor(),
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -158,15 +158,9 @@ class _MainPageState extends State<MainPage> {
                   child: _getDangerOptions(),
                 ),
                 Expanded(
-                  child: Container(
+                  child: Container(),
+                ),
 
-                  ),
-                ),
-                Container(
-                  height: 80,
-                  child: Logolar(),
-                ),
-                SizedBox(height: 10,),
                 Container(
                   margin: EdgeInsets.only(bottom: 5),
                   child: _lastStatus(),
@@ -174,6 +168,13 @@ class _MainPageState extends State<MainPage> {
                 Container(
                   margin: EdgeInsets.only(bottom: 5),
                   child: _locationStatus(),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 80,
+                  child: Logolar(),
                 ),
 //                Container(
 //                  child: _currentUserDetails(),
@@ -492,7 +493,7 @@ class _MainPageState extends State<MainPage> {
 
     if (result)
       Fluttertoast.showToast(
-          msg: "Durum Güncellendi",
+          msg: "Durum Bildirildi",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -596,7 +597,7 @@ class _MainPageState extends State<MainPage> {
 
     if (result)
       Fluttertoast.showToast(
-          msg: "Durum Güncellendi",
+          msg: "Durum Bildirildi",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,

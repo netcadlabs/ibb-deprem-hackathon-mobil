@@ -85,6 +85,11 @@ class AuthenticationService {
 
     prefs.remove(_STATUS);
     prefs.remove(_LAST_UPDATE);
+
+    List<String> relativeList = prefs.getStringList(_RELATIVES);
+    relativeList.forEach((identifier) {
+      prefs.remove("status-${identifier}");
+    });
     prefs.remove(_RELATIVES);
 
     _registeredDeviceCredentials = null;
@@ -95,6 +100,7 @@ class AuthenticationService {
   Future<bool> removeRelative(String identifier) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    prefs.remove("status-${identifier}");
     List<String> list = prefs.getStringList(_RELATIVES);
     if (list == null) return false;
 
